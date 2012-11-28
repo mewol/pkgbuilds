@@ -1,0 +1,46 @@
+# Maintainer: mewol <mewolejko@gmail.com>
+
+pkgname=nwn-prc
+pkgver=3.5
+pkgrel=1
+pkgdesc="PRC (Player Resource Something) Pack for Neverwinter Nights"
+url="http://www.nwnprc.com"
+license=('custom')
+arch=('any')
+groups=("games")
+depends=('nwn')
+source=("http://vnfiles.ign.com/nwvault.ign.com/fms/files/hakpaks/7870/PRC35.rar"
+        "http://vnfiles.ign.com/nwvault.ign.com/fms/files/hakpaks/7870/prc_manual35.7z"
+        "http://vnfiles.ign.com/nwvault.ign.com/fms/files/other/926/PRCGUIv01.rar")
+md5sums=("19ec259c0e5a9f98ca24cadafb93fd44"
+         "f2aa227fbf94bcf64e6f5f8f1ef2dec2"
+         "44a5cda12096bc677dde33914defdf50")
+makedepends=('unrar' 'p7zip' 'convmv')
+noextract=("PRC35.rar"
+           "prc_manual35.7z"
+           "PRCGUIv01.rar")
+PKGEXT=".pkg.tar"
+
+package() {
+  mkdir -p "${pkgdir}/opt/nwn/hak"
+  mkdir -p "${pkgdir}/opt/nwn/tlk"
+  mkdir -p "${pkgdir}/opt/nwn/database"
+  mkdir -p "${pkgdir}/opt/nwn/erf"
+  mkdir -p "${pkgdir}/opt/nwn/prc"
+  mkdir -p "${pkgdir}/opt/nwn/override"
+
+  cd "$srcdir/"
+  unrar x PRC35.rar
+  7z x -omanual prc_manual35.7z
+  unrar x PRCGUIv01.rar
+  
+  convmv --lower --notest -r *
+
+  mv hak/*.hak hak/*.hif ${pkgdir}/opt/nwn/hak/
+  mv tlk/* ${pkgdir}/opt/nwn/tlk/
+  mv database/* ${pkgdir}/opt/nwn/database/
+  mv erf/* ${pkgdir}/opt/nwn/erf/
+  mv manual/* ${pkgdir}/opt/nwn/prc/
+  mv *.tga ${pkgdir}/opt/nwn/override
+}
+

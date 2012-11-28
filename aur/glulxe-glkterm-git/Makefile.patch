@@ -1,0 +1,22 @@
+--- src/gluxle/Makefile	2012-11-26 15:41:13.142345481 -0500
++++ src/gluxle/Makefile	2012-11-26 22:56:03.637128737 -0500
+@@ -7,13 +7,13 @@
+ # sets of values appear below; uncomment one of them and change the
+ # directories appropriately.
+ 
+-GLKINCLUDEDIR = ../cheapglk
+-GLKLIBDIR = ../cheapglk
+-GLKMAKEFILE = Make.cheapglk
++#GLKINCLUDEDIR = ../cheapglk
++#GLKLIBDIR = ../cheapglk
++#GLKMAKEFILE = Make.cheapglk
+ 
+-#GLKINCLUDEDIR = ../glkterm
+-#GLKLIBDIR = ../glkterm
+-#GLKMAKEFILE = Make.glkterm
++GLKINCLUDEDIR = ../glkterm-build
++GLKLIBDIR = ../glkterm-build
++GLKMAKEFILE = Make.glkterm
+ 
+ #GLKINCLUDEDIR = ../xglk
+ #GLKLIBDIR = ../xglk

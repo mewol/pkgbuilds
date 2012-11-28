@@ -1,0 +1,38 @@
+# Maintainer: mewol <mewolejko@gmail.com>
+
+pkgname=nwn-cep
+pkgver=1.68
+pkgrel=1
+pkgdesc="Community Expansion Pack for Neverwinter Nights"
+url="http://nwn.bioware.com/players/cep.html"
+license=('custom')
+arch=('i686' 'x86_64')
+groups=("games")
+depends=('nwn')
+source=("http://c.vnfiles.ign.com/nwvault.ign.com/fms/files/hakpaks/6057/cepv152_man.rar"
+        "http://c.vnfiles.ign.com/nwvault.ign.com/fms/files/hakpaks/6974/CEP168.rar")
+md5sums=("5bb764b48b42c5aee0bdefe7b9c69b44"
+        "4f8a882c77baecedb7b36749b90db1e2")
+makedepends=('unrar')
+noextract=("cepv152_man.rar"
+           "CEP168.rar")
+PKGEXT=".pkg.tar"
+
+package() {
+  mkdir -p "${pkgdir}/opt/nwn/hak"
+  mkdir -p "${pkgdir}/opt/nwn/tlk"
+  mkdir -p "${pkgdir}/opt/nwn/texturepacks"
+  mkdir -p "${pkgdir}/opt/nwn/modules"
+  mkdir -p "${pkgdir}/opt/nwn/cep"
+
+  cd "$srcdir/"
+  unrar x cepv152_man.rar
+  unrar x CEP168.rar
+
+  mv *.hak HotU/*.hak ${pkgdir}/opt/nwn/hak/
+  mv *.tlk ${pkgdir}/opt/nwn/tlk/
+  mv *.erf ${pkgdir}/opt/nwn/texturepacks/
+  mv *.mod ${pkgdir}/opt/nwn/modules/
+  mv *.pdf *.txt ${pkgdir}/opt/nwn/cep/
+}
+

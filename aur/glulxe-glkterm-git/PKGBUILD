@@ -1,0 +1,109 @@
+# This is an example PKGBUILD file. Use this as a start to creating your own,
+# and remove these comments. For more information, see 'man PKGBUILD'.
+# NOTE: Please fill out the license field for your package! If it is unknown,
+# then please put 'unknown'.
+
+# See http://wiki.archlinux.org/index.php/VCS_PKGBUILD_Guidelines
+# for more information on packaging from GIT sources.
+
+# Maintainer: matt wolejko <mewolejko@gmail.com>
+pkgname=glulxe-glkterm-git
+pkgver=20121128
+pkgrel=1
+pkgdesc="ncurses-based interactive fiction interpreter for Glulx (Inform) games."
+arch=('i686' 'x86_64')
+url="http://www.eblong.com/zarf/glulx/"
+license=('custom')
+groups=()
+depends=('ncurses')
+makedepends=('git')
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+source=()
+noextract=()
+md5sums=() #generate with 'makepkg -g'
+
+_gitroot=https://github.com/erkyrath/glkterm.git
+_gitname=glkterm
+
+_gitroot2=https://github.com/erkyrath/glulxe.git
+_gitname2=gluxle
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT servers...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The $_gitname files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+  
+  cd "$srcdir"
+
+  if [[ -d "$_gitname2" ]]; then
+    cd "$_gitname2" && git pull origin
+    msg "The $_gitname2 files are updated."
+  else
+    git clone "$_gitroot2" "$_gitname2"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+# Clone and build glkterm. No need for any install.
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+  
+  make
+
+# throw in some text for people who watch it compile and
+# notice something weird going on
+
+  msg "
+  
+        ##########################################
+        #    glkterm built, building  glulxe     #
+        ##########################################
+
+        
+        "
+# Clone glulxe, patch the Makefile so it can find glkterm, and compile.
+
+  rm -rf "$srcdir/$_gitname2-build"
+  git clone "$srcdir/$_gitname2" "$srcdir/$_gitname2-build"
+  cd "$srcdir/$_gitname2-build"
+
+  
+  patch Makefile < ../../Makefile.patch
+  make glulxe
+}
+
+package() {
+  mkdir -p "$pkgdir/usr/bin/"
+  
+  cd "$srcdir/$_gitname2-build"
+  cp glulxe "$pkgdir/usr/bin/glulxe-glkterm"
+
+# annoying custom license thing. the last 11 lines are the relevant 
+# license stuff, the first few are just to include the program name & URL
+# there's probably a less hacky way to do this, if it even matters
+
+  mkdir -p "$pkgdir/usr/share/licenses/$pkgname"
+  head -n 5 "$srcdir/$_gitname2-build/README" >  "$pkgdir/usr/share/licenses/$pkgname/glulxe"
+  tail -n 11 "$srcdir/$_gitname2-build/README" >> "$pkgdir/usr/share/licenses/$pkgname/glulxe"
+
+  head -n 7 "$srcdir/$_gitname-build/readme.txt" > "$pkgdir/usr/share/licenses/$pkgname/glkterm"
+  tail -n 11 "$srcdir/$_gitname-build/readme.txt" >> "$pkgdir/usr/share/licenses/$pkgname/glkterm"
+
+  msg "Note: Binary is /usr/bin/glulxe-glkterm ."
+}
+
+# vim:set ts=2 sw=2 et:

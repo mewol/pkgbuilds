@@ -1,0 +1,82 @@
+# This is an example PKGBUILD file. Use this as a start to creating your own,
+# and remove these comments. For more information, see 'man PKGBUILD'.
+# NOTE: Please fill out the license field for your package! If it is unknown,
+# then please put 'unknown'.
+
+# See http://wiki.archlinux.org/index.php/VCS_PKGBUILD_Guidelines
+# for more information on packaging from GIT sources.
+
+# Maintainer: Matt Wolejko <mewolejko@ that google mail thing>
+# Contributor: AlexanderR <alexander r at gmx com>
+# Contributor: Eric Forgeot < http://ifiction.free.fr >
+pkgname=fizmo-git
+pkgver=20121128
+pkgrel=1
+pkgdesc="A Z-Machine interpreter supporting unicode, sound, blorbfile and more, git version."
+arch=('x86_64' 'i686')
+url="http://spellbreaker.org/~chrender/fizmo/"
+license=('BSD')
+#http://spellbreaker.org/~chrender/fizmo/license/
+groups=()
+depends=('libxml2' 'ncurses')
+makedepends=('git')
+provides=()
+conflicts=('fizmo')
+replaces=('fizmo')
+backup=()
+options=()
+install=
+source=()
+noextract=()
+md5sums=() #generate with 'makepkg -g'
+
+_gitroot=https://github.com/erkyrath/fizmo.git
+_gitname=fizmo
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  #
+  # BUILD HERE
+  #
+#  ./autogen.sh
+  mv config.default.mk config.mk
+  sed -i 's/usr\/local/usr/'  "$srcdir/$_gitname-build/config.mk"
+#  ./configure --prefix=/usr
+#  make
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+#  mkdir "$pkgdir/usr"
+  mkdir -p "$pkgdir/usr/share/fizmo/locales/de_DE/"
+  mkdir -p "$pkgdir/usr/share/fizmo/locales/en_US/"
+  mkdir -p "$pkgdir/usr/share/fizmo/locales/fr_FR/"
+
+#  make DESTDIR="$pkgdir/" install
+#  make install-locales
+#  make install-fizmo-ncursesw
+#  make install-fizmo-console
+#  make install-fizmo-glktermw
+  make install
+
+#  install -Dm644 COPYRIGHT.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+}
+
+# vim:set ts=2 sw=2 et:
