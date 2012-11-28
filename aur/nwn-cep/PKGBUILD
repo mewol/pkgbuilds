@@ -1,5 +1,8 @@
 # Maintainer: Matt Wolejko <mewolejko@ that google mail thing>
 
+# relies upon things being installed where my nwn-platinum PKGBUILD puts them
+
+
 pkgname=nwn-cep
 pkgver=1.68
 pkgrel=1
