@@ -1,4 +1,4 @@
-# NOT WORKING YET
+# CURRENTLY BROKEN
 
 # Maintainer: Matt Wolejko <mewolejko@ that google mail thing>
 # Contributor: AlexanderR <alexander r at gmx com>
@@ -48,19 +48,16 @@ build() {
   #
   # BUILD HERE
   #
-#  ./autogen.sh
   mv config.default.mk config.mk
   sed -i 's/usr\/local/usr/'  "$srcdir/$_gitname-build/config.mk"
-#  ./configure --prefix=/usr
-#  make
 }
 
 package() {
   cd "$srcdir/$_gitname-build"
 #  mkdir "$pkgdir/usr"
-  mkdir -p "$pkgdir/usr/share/fizmo/locales/de_DE/"
-  mkdir -p "$pkgdir/usr/share/fizmo/locales/en_US/"
-  mkdir -p "$pkgdir/usr/share/fizmo/locales/fr_FR/"
+#  mkdir -p "$pkgdir/usr/share/fizmo/locales/de_DE/"
+#  mkdir -p "$pkgdir/usr/share/fizmo/locales/en_US/"
+#  mkdir -p "$pkgdir/usr/share/fizmo/locales/fr_FR/"
 
 #  make DESTDIR="$pkgdir/" install
 #  make install-locales
