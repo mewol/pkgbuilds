@@ -1,0 +1,29 @@
+--- Makefile	2009-04-02 18:54:50.000000000 -0400
++++ Makefile	2012-12-06 09:58:00.640657930 -0500
+@@ -5,20 +5,20 @@
+ 
+ # Note: when using xglk, do NOT define USE_MMAP in step 2, below.
+ 
+-GLK = cheapglk
+-#GLK = glkterm
++#GLK = cheapglk
++GLK = glkterm
+ #GLK = xglk
+ 
+-GLKINCLUDEDIR = ../$(GLK)
+-GLKLIBDIR = ../$(GLK)
++GLKINCLUDEDIR = ../$(GLK)-build
++GLKLIBDIR = ../$(GLK)-build
+ GLKMAKEFILE = Make.$(GLK)
+ 
+ # -----------------------------------------------------------------
+ # Step 2: pick a C compiler.
+ 
+ # Generic C compiler
+-CC = cc -O2
+-OPTIONS = 
++CC = gcc -O2
++OPTIONS = -DUSE_DIRECT_THREADING
+ 
+ # Best settings for GCC 2.95. This generates faster code than
+ # GCC 3, so you should use this setup if possible.

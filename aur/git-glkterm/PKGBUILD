@@ -1,0 +1,71 @@
+# NOTE: the software here is Git (not the source control system), version
+# 1.2.4, the glk library used is glkterm, from its git repository. 
+# Naming is sort of a mess, is what I'm getting at. 
+
+# Maintainer: Matt Wolejko <mewolejko@ the one before h mail.com>
+pkgname=git-glkterm
+pkgname2=git
+pkgver=20121206
+pkgver2=1.2.4
+pkgrel=1
+pkgdesc="Interactive fiction interpreter optimized for speed, ncurses version."
+arch=('i686' 'x86_64')
+url="http://diden.net/if/git/"
+license=('MIT')
+groups=()
+depends=('ncurses')
+makedepends=('git')
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+source=(http://diden.net/if/git/releases/git-124.zip)
+noextract=()
+md5sums=('f30f70217c662888fbcb2c8ec390c5c1')
+
+_gitroot=https://github.com/erkyrath/glkterm.git
+_gitname=glkterm
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+  # 
+  # build glkterm library
+  #
+  make
+
+  #
+  # patch git Makefile and build git
+  #
+  
+  cd "$srcdir/$pkgname2-$pkgver2"
+  patch Makefile < ../../Makefile.patch
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname2-$pkgver2"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/licenses/$pkgname2"
+
+  cp git "$pkgdir/usr/bin/git-glkterm"
+  cp README.txt "$pkgdir/usr/share/licenses/$pkgname2/"
+}
+
+# vim:set ts=2 sw=2 et:
