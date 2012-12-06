@@ -1,3 +1,16 @@
 Simple repository for a few PKGBUILDs for Arch Linux, primarily for personal use.
 
 Not guaranteed to work, look nice, or do anything else.
+
+What's here? 
+
+nwn-platinum: Neverwinter Nights (1), platinum edition release
+nwn-cep: Community Expansion Pack for NWN
+nwn-prc: Player Resource Something-that-begins-with "c" pack for NWN
+
+xbmc-mew: XBMC copied almost entirely from the xbmc-git in the AUR. Since the maintainer for the AUR version feels compelled to update every day (triggering a rebuild with automated tools), this is my local copy.
+
+git-glkterm: Git interactive fiction (glulx, inform) interpreter using the glkterm ncurses library. Nice and quick.
+glulxe-glkterm-git: As above, but with glulxe, and git repository for both. Not as quick.
+gargoyle-svn: svn checkout of gargoyle, GUI-based. Much quicker than last release.
+fizmo-git: git version of fizmo (currently broken)
