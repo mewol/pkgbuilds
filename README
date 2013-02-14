@@ -15,4 +15,4 @@ glulxe-glkterm-git: As above, but with glulxe, and git repository for both. Not 
 gargoyle-svn: svn checkout of gargoyle, GUI-based. Much quicker than last release.
 fizmo-git: git version of fizmo (currently broken)
 
-g15macro-svn: the version in the aur mysteriously doesn't pull from subversion at all, and fails to compile on my machine. This one does pull from subversion and does compile on my machine, thanks to a couple of patches. Still a work in progress.
+g15macro-svn: the version in the aur mysteriously doesn't pull from subversion at all, and fails to compile on my machine. This one does pull from subversion and does compile on my machine, thanks to a couple of patches. Needs fleshing out and simplifying still.
