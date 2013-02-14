@@ -1,0 +1,10 @@
+--- g15daemon-build/trunk/g15daemon-clients/g15macro/configure.in	2009-01-24 14:39:47.650957000 -0500
++++ configure.in	2013-02-13 11:15:32.367666181 -0500
+@@ -8,7 +8,6 @@
+ AC_CONFIG_HEADER([config.h])
+ 
+ AC_PROG_CC
+-AC_PROG_LIBTOOL
+ AC_PROG_RANLIB
+ 
+ AC_CHECK_LIB([g15daemon_client], [g15daemon_version],,AC_MSG_ERROR(["libg15daemon_client (or its devel package) not found. please install it"]))

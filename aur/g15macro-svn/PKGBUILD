@@ -1,0 +1,68 @@
+# Maintainer: mewol <@>
+pkgname=g15macro-svn
+pkgver=539
+pkgrel=1
+pkgdesc="Macro tools for Logitech G15 (and other) keyboards."
+arch=('x86_64')
+url="http://www.g15tools.com"
+#
+#svn co https://g15tools.svn.sourceforge.net/svnroot/g15tools g15tools
+#svn co https://g15daemon.svn.sourceforge.net/svnroot/g15daemon g15daemon
+#
+license=('GPL')
+groups=()
+depends=('g15daemon-svn')
+makedepends=('subversion')
+provides=()
+conflicts=('g15macro')
+replaces=()
+backup=()
+options=()
+#install=
+source=()
+noextract=()
+md5sums=() #generate with 'makepkg -g'
+
+_svntrunk=https://g15daemon.svn.sourceforge.net/svnroot/g15daemon/
+_svnmod=g15daemon
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to SVN server...."
+
+  if [[ -d "$_svnmod/.svn" ]]; then
+    (cd "$_svnmod" && svn up -r "$pkgver")
+  else
+    svn co "$_svntrunk" --config-dir ./ -r "$pkgver" "$_svnmod"
+  fi
+
+  msg "SVN checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_svnmod-build"
+  svn export "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build/trunk/g15daemon-clients/g15macro"
+
+#  patch -Np1 -i "$srcdir/${pkgname}-configure.in.patch"
+#  patch -Np1 -i "$srcdir/${pkgname}-Makefile.am.patch"
+  patch "$srcdir/$_svnmod-build/trunk/g15daemon-clients/g15macro/configure.in" < "$srcdir/../${pkgname}-configure.in.patch"
+  patch "$srcdir/$_svnmod-build/trunk/g15daemon-clients/g15macro/Makefile.am" < "$srcdir/../${pkgname}-Makefile.am.patch"
+
+  #
+  # BUILD HERE
+  #
+  ./autogen.sh
+  ./configure --prefix=/usr \
+              --enable-xtest \
+              --sysconfdir=/etc \
+              --localstatedir=/var 
+
+  make
+}
+
+package() {
+  cd "$srcdir/$_svnmod-build"
+  make DESTDIR="$pkgdir/" install
+}
+
+# vim:set ts=2 sw=2 et:

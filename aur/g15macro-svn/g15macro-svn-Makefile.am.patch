@@ -1,0 +1,13 @@
+--- g15daemon-build/trunk/g15daemon-clients/g15macro/Makefile.am	2009-10-15 11:46:43.578488000 -0400
++++ Makefile.am	2013-02-13 11:12:54.068585273 -0500
+@@ -10,9 +10,8 @@
+ imagedir = $(prefix)/share/g15macro/splash
+ image_DATA = ${top_builddir}/g15macro.wbmp
+ 
+-LIBS = -lg15daemon_client -lg15render -lX11 -lXtst 
++LIBS = -lg15daemon_client -lg15render -lX11 -lXtst -lpthread -lm
+ IMCLUDES = -I
+-g15macro_LDFLAGS = -avoid-version
+ g15macro_SOURCES =  g15macro.c fileHandling.c
+ 
+ 
