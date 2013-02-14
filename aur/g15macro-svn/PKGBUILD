@@ -61,7 +61,7 @@ build() {
 }
 
 package() {
-  cd "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build/trunk/g15daemon-clients/g15macro"
   make DESTDIR="$pkgdir/" install
 }
 
