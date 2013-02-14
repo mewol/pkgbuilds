@@ -6,6 +6,8 @@ pkgdesc="Macro tools for Logitech G15 (and other) keyboards."
 arch=('x86_64')
 url="http://www.g15tools.com"
 #
+# svn repos. This pkgbuild uses the second one. 
+#
 #svn co https://g15tools.svn.sourceforge.net/svnroot/g15tools g15tools
 #svn co https://g15daemon.svn.sourceforge.net/svnroot/g15daemon g15daemon
 #
@@ -40,11 +42,14 @@ build() {
   msg "Starting build..."
 
   rm -rf "$srcdir/$_svnmod-build"
+#  
+# I should probably change this next line so as to only copy over the directory
+# that's actually being used, thereby making life easier. But since I've 
+# already complicated the rest of the script, I'll do it later. 
+#
   svn export "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
   cd "$srcdir/$_svnmod-build/trunk/g15daemon-clients/g15macro"
 
-#  patch -Np1 -i "$srcdir/${pkgname}-configure.in.patch"
-#  patch -Np1 -i "$srcdir/${pkgname}-Makefile.am.patch"
   patch "$srcdir/$_svnmod-build/trunk/g15daemon-clients/g15macro/configure.in" < "$srcdir/../${pkgname}-configure.in.patch"
   patch "$srcdir/$_svnmod-build/trunk/g15daemon-clients/g15macro/Makefile.am" < "$srcdir/../${pkgname}-Makefile.am.patch"
 
