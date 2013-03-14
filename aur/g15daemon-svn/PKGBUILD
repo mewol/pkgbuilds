@@ -1,0 +1,69 @@
+# Maintainer: mewol <@>
+# Contributor: Michael Manley <mmanley@nasutek.com>
+# Contributor: onestep_ua <onestep@ukr.net>
+pkgname=g15daemon-svn
+pkgver=539
+pkgrel=1
+pkgdesc="Daemon for Logitech G15 (and other) keyboards."
+arch=('x86_64')
+url="http://www.g15tools.com"
+#
+#svn co https://g15tools.svn.sourceforge.net/svnroot/g15tools g15tools
+#svn co https://g15daemon.svn.sourceforge.net/svnroot/g15daemon g15daemon
+#
+license=('GPL')
+groups=()
+depends=()
+makedepends=('subversion')
+provides=()
+conflicts=('g15daemon')
+replaces=()
+backup=()
+options=()
+#install=
+source=()
+noextract=()
+md5sums=() #generate with 'makepkg -g'
+
+_svntrunk=https://g15daemon.svn.sourceforge.net/svnroot/g15daemon/
+_svnmod=g15daemon
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to SVN server...."
+
+  if [[ -d "$_svnmod/.svn" ]]; then
+    (cd "$_svnmod" && svn up -r "$pkgver")
+  else
+    svn co "$_svntrunk" --config-dir ./ -r "$pkgver" "$_svnmod"
+  fi
+
+  msg "SVN checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_svnmod-build"
+  svn export "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
+  cd "$srcdir/$_svnmod-build/trunk/g15daemon"
+
+
+  #
+  # BUILD HERE
+  #
+  ./autogen.sh
+  ./configure --prefix=/usr \
+              --enable-xtest \
+              --sysconfdir=/etc \
+              --localstatedir=/var 
+
+  make
+}
+
+package() {
+  cd "$srcdir/$_svnmod-build/trunk/g15daemon"
+  make DESTDIR="$pkgdir/" install
+
+  # install initscript
+  install -D -m 755 "${srcdir}/../g15daemon-script" "${pkgdir}/etc/rc.d/g15daemon"
+}
+
+# vim:set ts=2 sw=2 et:
