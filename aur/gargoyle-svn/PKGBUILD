@@ -1,8 +1,8 @@
-# Maintainer: Matt Wolejko <mewolejko@ that google mail thing>
+# Maintainer: Matt Wolejko <mewolejko@gmail.com>
 # Contributor: Eric Forgeot < http://ifiction.free.fr >
 pkgname=gargoyle-svn
-pkgver=609
-pkgrel=1
+pkgver=611
+pkgrel=2
 pkgdesc="Interactive Fiction multi-interpreter that supports all major IF formats, svn version."
 arch=(i686 x86_64)
 url="http://code.google.com/p/garglk/"
@@ -22,6 +22,11 @@ noextract=()
 groups=(inform)
 source=()
 md5sums=()
+
+pkgver() {
+    cd "$srcdir/$_svnmod"
+    svnversion | tr -d [A-z]
+}
 
 _svntrunk=http://garglk.googlecode.com/svn/trunk/
 _svnmod=garglk-svn
