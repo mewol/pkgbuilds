@@ -25,6 +25,11 @@ source=()
 noextract=()
 md5sums=() #generate with 'makepkg -g'
 
+pkgver() {
+  cd "$srcdir/$_svnmod"
+  svnversion | tr -d [A-z]
+}
+
 _svntrunk=https://g15daemon.svn.sourceforge.net/svnroot/g15daemon/
 _svnmod=g15daemon
 
