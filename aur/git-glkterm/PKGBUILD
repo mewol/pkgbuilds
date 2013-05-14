@@ -5,7 +5,7 @@
 # Maintainer: Matt Wolejko <mewolejko@ the one before h mail.com>
 pkgname=git-glkterm
 pkgname2=git
-pkgver=20121206
+pkgver=20130514
 pkgver2=1.2.4
 pkgrel=1
 pkgdesc="Interactive fiction interpreter optimized for speed, ncurses version."
@@ -27,6 +27,10 @@ md5sums=('f30f70217c662888fbcb2c8ec390c5c1')
 
 _gitroot=https://github.com/erkyrath/glkterm.git
 _gitname=glkterm
+
+pkgver() {
+     date +%Y%m%d
+}
 
 build() {
   cd "$srcdir"
