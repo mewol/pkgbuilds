@@ -30,6 +30,13 @@ build() {
 	cd $_svnmod-build/engine
 	make
 }
+
+pkgver() {
+	cd $_svnmod
+	local ver="$(svnversion)"
+	printf "%s" "${ver//[[:alpha:]]}"
+}
+
 package() {
 	cd "$srcdir"/$_svnmod-build/engine
 
