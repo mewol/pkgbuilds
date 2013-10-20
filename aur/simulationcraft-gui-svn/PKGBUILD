@@ -1,0 +1,34 @@
+# Maintainer: Devin Cofer <ranguvar@archlinux.us>
+# Contributor: mewol
+
+pkgname=simulationcraft-gui-svn
+pkgdesc="A tool to simulate, analyze, and graphically display World of Warcraft combat (SVN code)"
+pkgver=17924
+pkgrel=1
+url="http://code.google.com/p/simulationcraft/"
+arch=('i686' 'x86_64')
+license=('GPL3')
+source=("$pkgname"::'svn+http://simulationcraft.googlecode.com/svn/trunk')
+conflicts=()
+makedepends=('subversion')
+depends=('qtchooser' 'qt5-webkit')
+md5sums=('SKIP')
+
+build() {
+	cd "$pkgname"
+	qmake simcqt.pro
+        make
+}
+
+pkgver() {
+        cd "$pkgname"
+	local ver="$(svnversion)"
+	printf "%s" "${ver//[[:alpha:]]}"
+}
+
+package() {
+	cd "$pkgname"
+
+	install -Dm755 SimulationCraft "$pkgdir"/usr/bin/SimulationCraft
+        msg "NOTE: binary is installed as /usr/bin/SimulationCraft"
+}
