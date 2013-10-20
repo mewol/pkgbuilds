@@ -1,5 +1,4 @@
-# Maintainer: Devin Cofer <ranguvar@archlinux.us>
-# Contributor: mewol
+# Maintainer: mewol
 
 pkgname=simulationcraft-qt5-svn
 pkgdesc="A tool to simulate, analyze, and graphically display World of Warcraft combat, QT5 version (SVN code)"
