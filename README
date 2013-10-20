@@ -21,3 +21,4 @@ g15daemon-svn: the aur version for this also didn't pull from subversion. And di
 NOTE: I've abandoned both of thse in favor of using the repo at http://packages.russo79.com/archlinux/$repo/os/$arch for compiled versions.
 
 simulationcraft-svn: now in the current style! (Which I still need to do with the rest of these.)
+simulationcraft-gui-svn

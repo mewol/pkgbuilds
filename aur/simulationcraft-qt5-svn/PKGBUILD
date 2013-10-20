@@ -1,8 +1,8 @@
 # Maintainer: Devin Cofer <ranguvar@archlinux.us>
 # Contributor: mewol
 
-pkgname=simulationcraft-gui-svn
-pkgdesc="A tool to simulate, analyze, and graphically display World of Warcraft combat (SVN code)"
+pkgname=simulationcraft-qt5-svn
+pkgdesc="A tool to simulate, analyze, and graphically display World of Warcraft combat, QT5 version (SVN code)"
 pkgver=17924
 pkgrel=1
 url="http://code.google.com/p/simulationcraft/"
