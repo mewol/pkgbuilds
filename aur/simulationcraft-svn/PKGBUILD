@@ -3,45 +3,29 @@
 
 pkgname=simulationcraft-svn
 pkgdesc="A tool to simulate, analyze, and graphically display World of Warcraft combat (SVN code)"
-pkgver=17686
+pkgver=17924
 pkgrel=1
 url="http://code.google.com/p/simulationcraft/"
 arch=('i686' 'x86_64')
 license=('GPL3')
-
-makedepends=()
+source=("$pkgname"::'svn+http://simulationcraft.googlecode.com/svn/trunk')
+makedepends=('subversion')
 depends=()
-
-_svntrunk="http://simulationcraft.googlecode.com/svn/trunk"
-_svnmod="simulationcraft"
+md5sums=('SKIP')
 
 build() {
-	cd "$srcdir"
-	msg2 "Peforming source checkout"
-	if [[ -d "$_svnmod/.svn" ]]; then
-		(cd $_svnmod && svn up -r $pkgver)
-	else
-		svn co $_svntrunk --config-dir ./ -r $pkgver $_svnmod
-	fi
-
-        msg2 "Source checkout completed or connection error"
-	msg2 "Starting build..."
-
-        rm -rf "$srcdir/$_svnmod-build"
-	svn export "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
-
-	cd "$srcdir/$_svnmod-build/engine"
+	cd "$pkgname"/engine
 	make
 }
 
 pkgver() {
-        cd $_svnmod
+        cd "$pkgname"
 	local ver="$(svnversion)"
 	printf "%s" "${ver//[[:alpha:]]}"
 }
 
 package() {
-	cd "$srcdir"/$_svnmod-build/engine
+	cd "$pkgname"/engine
 
 	install -Dm755 simc "$pkgdir"/usr/bin/simc
 }
