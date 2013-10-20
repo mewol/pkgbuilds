@@ -1,3 +1,5 @@
 src/
 pkg/
 *-build/
+*.xz
+*.proto
