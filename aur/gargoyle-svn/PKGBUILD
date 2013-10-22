@@ -1,8 +1,8 @@
-# Maintainer: Matt Wolejko <mewolejko@gmail.com>
+# Maintainer: mewol
 # Contributor: Eric Forgeot < http://ifiction.free.fr >
 pkgname=gargoyle-svn
 pkgver=611
-pkgrel=2
+pkgrel=1
 pkgdesc="Interactive Fiction multi-interpreter that supports all major IF formats, svn version."
 arch=(i686 x86_64)
 url="http://code.google.com/p/garglk/"
@@ -17,58 +17,36 @@ replaces=('gargoyle' 'gargoyle-mod')
 backup=()
 options=()
 install=
-source=()
+source=("$pkgname"::'svn+http://garglk.googlecode.com/svn/trunk/')
 noextract=()
-groups=(inform)
-source=()
-md5sums=()
-
-pkgver() {
-    cd "$srcdir/$_svnmod"
-    svnversion | tr -d [A-z]
-}
-
-_svntrunk=http://garglk.googlecode.com/svn/trunk/
-_svnmod=garglk-svn
+groups=()
+md5sums=('SKIP')
 
 build() {
-    # do important subversion stuff
-    cd "$srcdir"
-    msg "Connecting to SVN server...."
-
-    if [[ -d "$_svnmod/.svn" ]]; then
-      (cd "$_svnmod" && svn up -r "$pkgver")
-    else
-      svn co "$_svntrunk" --config-dir ./ -r "$pkgver" "$_svnmod"
-    fi
-
-    msg "SVN checkout done or server timeout"
-    msg "Starting build..."
-
-    rm -rf "$srcdir/$_svnmod-build"
-    svn export "$srcdir/$_svnmod" "$srcdir/$_svnmod-build"
-    cd "$srcdir/$_svnmod-build"
-
-	# Make some configuration changes
-	#sed -i 's|MAKE_ALAN2      ?= yes ;|MAKE_ALAN2      ?= no ;|' $srcdir/terps/Jamfile 
-	sed -i "s|OPTIM = -O2 ;|OPTIM = ${CFLAGS} ;|" $srcdir/$_svnmod-build/Jamrules
+	sed -i "s|OPTIM = -O2 ;|OPTIM = ${CFLAGS} ;|" $pkgname/Jamrules
     
-    # build and install
-	cd "$srcdir/$_svnmod-build"
+	cd "$pkgname"
 	jam ||return 1
 	jam install || return 1
 }
+
+pkgver() {
+    cd "$pkgname"
+    local ver="$(svnversion)"
+    printf "%s" "${ver//[[:alpha:]]}"
+}
+
 
 package() {
 	mkdir -p $pkgdir/usr/share/gargoyle/
 	mkdir -p $pkgdir/usr/bin
 	mkdir -p $pkgdir/usr/lib
-	install $srcdir/$_svnmod-build/build/dist/* $pkgdir/usr/share/gargoyle/
+	install $pkgname/build/dist/* $pkgdir/usr/share/gargoyle/
 	ln -s /usr/share/gargoyle/gargoyle $pkgdir/usr/bin/gargoyle
-	install $srcdir/$_svnmod-build/build/dist/libgarglk.so	$pkgdir/usr/lib/
+	install $pkgname/build/dist/libgarglk.so	$pkgdir/usr/lib/
 	
 	mkdir -p $pkgdir/etc
-	install $srcdir/$_svnmod-build/garglk/garglk.ini $pkgdir/etc/garglk.ini
+	install $pkgname/garglk/garglk.ini $pkgdir/etc/garglk.ini
 	
 	#desktop icons
 #	mkdir -p $pkgdir/usr/share/pixmaps
