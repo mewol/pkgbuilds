@@ -1,5 +1,4 @@
-# Maintainer: Devin Cofer <ranguvar@archlinux.us>
-# Contributor: mewol
+# Maintainer: mewol
 
 pkgname=simulationcraft-svn
 pkgdesc="A tool to simulate, analyze, and graphically display World of Warcraft combat (SVN code)"
