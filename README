@@ -8,12 +8,15 @@ nwn-platinum: Neverwinter Nights (1), platinum edition release
 nwn-cep: Community Expansion Pack for NWN
 nwn-prc: Player Resource Something-that-begins-with "c" pack for NWN
 
-xbmc-mew: XBMC copied almost entirely from the xbmc-git in the AUR. Since the maintainer for the AUR version feels compelled to update every day (triggering a rebuild with automated tools), this is my local copy.
-
 git-glkterm: Git interactive fiction (glulx, inform) interpreter using the glkterm ncurses library. Nice and quick.
 glulxe-glkterm-git: As above, but with glulxe, and git repository for both. Not as quick.
 gargoyle-svn: svn checkout of gargoyle, GUI-based. Much quicker than last release.
 fizmo-git: git version of fizmo (currently broken)
+frobtads-git: git version of frobtads
 
 g15macro-svn: the version in the aur mysteriously doesn't pull from subversion at all, and fails to compile on my machine. This one does pull from subversion and does compile on my machine, thanks to a couple of patches. Needs fleshing out and simplifying still.
 g15daemon-svn: the aur version for this also didn't pull from subversion. And didn't compile. And caused the logs on my machine to fill up with errors relating to the USB port. Now it does pull from svn, does compile (at least for me), and doesn't spew errors (yet). The accompanying script is wholly the work of the real maintainers.
+NOTE: I've abandoned both of thse in favor of using the repo at http://packages.russo79.com/archlinux/$repo/os/$arch for compiled versions.
+
+simulationcraft-svn: now in the current style! (Which I still need to do with the rest of these.)
+simulationcraft-qt5-svn: GUI version of same. Doesn't even conflict with the console version thanks to a different binary. Woo. 
