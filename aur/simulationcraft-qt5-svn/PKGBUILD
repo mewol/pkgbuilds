@@ -10,7 +10,7 @@ license=('GPL3')
 source=("$pkgname"::'svn+http://simulationcraft.googlecode.com/svn/trunk')
 conflicts=()
 makedepends=('subversion')
-depends=('qtchooser' 'qt5-webkit')
+depends=('qt5-webkit')
 md5sums=('SKIP')
 
 build() {
