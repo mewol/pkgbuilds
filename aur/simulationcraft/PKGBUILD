@@ -1,0 +1,37 @@
+# Maintainer: mewol
+
+pkgname=simulationcraft
+pkgdesc="A tool to simulate, analyze, and graphically display World of Warcraft combat (Release code)"
+pkgver=542
+pkgrel=1
+url="http://code.google.com/p/simulationcraft/"
+arch=('i686' 'x86_64')
+license=('GPL3')
+conflicts=('simulationcraft-svn')
+#source=("$pkgname"::'svn+http://simulationcraft.googlecode.com/svn/trunk')
+#makedepends=('subversion')
+## uncomment for debugging
+#options=('!strip' 'debug')
+depends=()
+source=(https://simulationcraft.googlecode.com/files/simc-$pkgver-$pkgrel-source.zip)
+md5sums=('bed6cb8c06aca8312defccb4b928b797')
+
+build() {
+#    export CFLAGS="$CFLAGS -O0 -fbuiltin -g"
+#    export CXXFLAGS="$CXXFLAGS -O0 -fbuiltin -g"
+#    cd "$pkgname"/engine
+    cd $srcdir/simulationcraft-74e35aa21861/engine
+    make
+}
+
+#pkgver() {
+#    cd "$pkgname"
+#    local ver="$(svnversion)"
+#    printf "%s" "${ver//[[:alpha:]]}"
+#}
+
+package() {
+#    cd "$pkgname"/engine
+    cd $srcdir/simulationcraft-74e35aa21861/engine
+    install -Dm755 simc "$pkgdir"/usr/bin/simc
+}
