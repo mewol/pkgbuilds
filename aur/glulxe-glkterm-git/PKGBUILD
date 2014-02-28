@@ -28,14 +28,15 @@ noextract=()
 md5sums=() #generate with 'makepkg -g'
 
 pkgver() {
-   date +%Y%m%d
+    cd "$srcdir/$_gitname2"
+    git describe --long | sed -r 's/([^-]*-g)/r\1/;s/-/./g'
 }
 
 _gitroot=https://github.com/erkyrath/glkterm.git
 _gitname=glkterm
 
 _gitroot2=https://github.com/erkyrath/glulxe.git
-_gitname2=gluxle
+_gitname2=glulxe
 
 build() {
   cd "$srcdir"
