@@ -2,29 +2,34 @@
 
 pkgname=simulationcraft-svn
 pkgdesc="A tool to simulate, analyze, and graphically display World of Warcraft combat (SVN code)"
-pkgver=17924
+pkgver=18139
 pkgrel=1
 url="http://code.google.com/p/simulationcraft/"
 arch=('i686' 'x86_64')
 license=('GPL3')
 source=("$pkgname"::'svn+http://simulationcraft.googlecode.com/svn/trunk')
 makedepends=('subversion')
+conflicts=('simulationcraft')
+## uncomment for debugging
+#options=('!strip' 'debug')
 depends=()
 md5sums=('SKIP')
 
 build() {
-	cd "$pkgname"/engine
-	make
+#    export CFLAGS="$CFLAGS -O0 -fbuiltin -g"
+#    export CXXFLAGS="$CXXFLAGS -O0 -fbuiltin -g"
+    cd "$pkgname"/engine
+    make
 }
 
 pkgver() {
-        cd "$pkgname"
-	local ver="$(svnversion)"
-	printf "%s" "${ver//[[:alpha:]]}"
+    cd "$pkgname"
+    local ver="$(svnversion)"
+    printf "%s" "${ver//[[:alpha:]]}"
 }
 
 package() {
-	cd "$pkgname"/engine
+    cd "$pkgname"/engine
 
-	install -Dm755 simc "$pkgdir"/usr/bin/simc
+    install -Dm755 simc "$pkgdir"/usr/bin/simc
 }
