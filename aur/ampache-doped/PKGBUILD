@@ -1,0 +1,38 @@
+#Maintainer: mewol
+
+pkgname=ampache-doped
+_gitname=ampache
+pkgver=3.6.alpha6.466.gbc0b8ab
+pkgrel=1
+pkgdesc="A PHP-based tool for managing and playing your audio/video files via a web interface"
+arch=('i686' 'x86_64')
+url="http://ampache-doped.github.io/"
+license=('GPL')
+depends=('mariadb>=5.0' 'php>=5.3')
+makedepends=('git')
+optdepends=('lame: all transcoding/downsampling'
+                'vorbis-tools: all transcoding'
+                'flac: flac transcoding/downsampling'
+                'faad2: m4a transcoding/downsampling'
+                'mp3splt: mp3 and ogg transcoding/downsampling')
+conflicts=('ampache' 'ampache-development')
+backup=(srv/http/ampache-doped/config/ampache.cfg.php)
+install=ampache.install
+source=(git://github.com/ampache-doped/ampache.git)
+md5sums=('SKIP')
+
+pkgver() {
+  cd ${_gitname}
+  git describe --always | sed 's|-|.|g'
+}
+
+build() {
+  echo "" > /dev/null
+}
+
+package() {
+  cd ${srcdir}/${_gitname}
+  mkdir -p ${pkgdir}/srv/http/${pkgname}
+  cp -a * ${pkgdir}/srv/http/${pkgname}/
+}
+

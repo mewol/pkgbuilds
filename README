@@ -20,3 +20,5 @@ NOTE: I've abandoned both of thse in favor of using the repo at http://packages.
 
 simulationcraft-svn: now in the current style! (Which I still need to do with the rest of these.)
 simulationcraft-qt5-svn: GUI version of same. Doesn't even conflict with the console version thanks to a different binary. Woo. 
+
+ampache-doped: Ampache is great. Ampache is poorly-maintained. Ampache-doped is active and maintained. Use it. 
