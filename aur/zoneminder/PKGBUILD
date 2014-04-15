@@ -22,6 +22,7 @@ arch=(
 )
 backup=(
   etc/zm.conf
+  etc/httpd/conf/extra/httpd-zomeminder.conf
 )
 url="https://github.com/ZoneMinder/ZoneMinder"
 license=(
@@ -51,45 +52,33 @@ depends=(
   php-mcrypt
 )
 makedepends=(
-  netpbm
+  netpbm cmake
 )
 optdepends=(
   netpbm
 )
-install=$pkgbase.install
+#install=$pkgbase.install
 source=(
   https://github.com/ZoneMinder/ZoneMinder/archive/v$pkgver.tar.gz
-#  httpd-$pkgbase.conf
-  $pkgbase
   $pkgbase.service
+  httpd-$pkgbase.conf
+#  $pkgbase.install
 )
 sha512sums=('8a349558399381a9062365ddc8bd8f815e3800929914096b2e4ea63e4d6dd12054f7b849fab5bea4bcfc87ea60739479a55734c7075a74aab0622d35f1d2bb14'
-#            '4ce0d8eba9d006d258f5b8a83920fc17f1f602b96518d37b7a47cd9b6eb84ef2587641a6ba839a469c3f0e33b46475866187279ae3f8be0d4054b074ee5d6b08'
-            'ab4e1d5ddaf4d9cd53d6ca59d7965902afd6a2dc830fbbafa270736c52c2b3563075fee860bb0276466f96e9dbfb71b259ac45a4ae2e4ead8eaec154a0159eb0'
-            'a49d1398065f72b5ed1b415abd4c438f34baba5e3efbe1c55c7312067d8ca90f542b8df1dcf57d0e73e1eea1fd884d7aad0888039e7537b69048aa7cc229359b')
+            '8bbfc47ef9d0ec6965b42b4a3e8dfc4b97e050990ef6ef599595659e86f0963b92b4e1af5cce8bf8042a474e9d5e86c6d9304f82cfa22f37c1053eab36276fe4'
+                        '40939f135eaa8ab1c33bed1602af49c2f95031e38c54a196db8c7a1939e0a96041e419cff3b527a1c0ee23f5c369c40387b695ff8d539ddcfd509f8e976bcd5a')
 
 build() {
   cd $srcdir/ZoneMinder-$pkgver
-  ./bootstrap.sh
- 
+  if [[ -e /etc/zm.conf ]]; then
+      ./cmakecacheimport.sh /etc/zm.conf
+      cmake -DCMAKE_INSTALL_PREFIX=/usr -C zm_conf.cmake .
+      make
+  else
+      cmake -DCMAKE_INSTALL_PREFIX=/usr -DZM_WEB_USER=http -DZM_WEB_GROUP=http -DZM_WEBDIR=/srv/http/zoneminder -ZM_CGIDIR=/srv/http/cgi-bin .
+      make
+  fi
 
-export CXXFLAGS=-D__STDC_CONSTANT_MACROS
-./configure --prefix=/usr\
-    --enable-crashtrace=no\
-    --enable-debug=no\
-    --enable-mmap=yes\
-    --sysconfdir=/etc\
-    --with-cgidir=/srv/http/cgi-bin\
-    --with-extralibs='-L/usr/lib -L/usr/lib/mysql'\
-    --with-libarch=lib\
-    --with-ffmpeg=/usr \
-    --with-mysql=/usr\
-    --with-webdir=/srv/http/$pkgbase\
-    --with-webgroup=http\
-    --with-webhost=localhost\
-    --with-webuser=http\
-
-  make V=0
 }
 
 package() {
@@ -97,26 +86,26 @@ package() {
 
   make DESTDIR=$pkgdir install
 
-  mkdir -p $pkgdir/{etc/{httpd/conf/extra,rc.d},srv/http/{cgi-bin,$pkgbase},usr/{lib/systemd/system,share/{license/$pkgbase,$pkgbase/db}},var/{cache/$pkgbase,log/$pkgbase}}
-  mkdir -p $pkgdir/srv/zoneminder/socks
-  chown -R http.http $pkgdir/{etc/zm.conf,var/{cache/$pkgbase,log/$pkgbase}}
-  chown -R http.http $pkgdir/srv/zoneminder/socks
-  chmod 0700 $pkgdir/etc/zm.conf
+#  mkdir -p $pkgdir/{etc/{httpd/conf/extra,rc.d},srv/http/{cgi-bin,$pkgbase},usr/{lib/systemd/system,share/{license/$pkgbase,$pkgbase/db}},var/{cache/$pkgbase,log/$pkgbase}}
+#  mkdir -p $pkgdir/srv/zoneminder/socks
+#  chown -R http.http $pkgdir/{etc/zm.conf,var/{cache/$pkgbase,log/$pkgbase}}
+#  chown -R http.http $pkgdir/srv/zoneminder/socks
+#  chmod 0700 $pkgdir/etc/zm.conf
 
-  for i in events images temp; do
-    mv    $pkgdir/srv/http/$pkgbase/$i $pkgdir/var/cache/$pkgbase/$i
-    ln -s /var/cache/$pkgbase/$i       $pkgdir/srv/http/$pkgbase/$i
-    chown -h http.http                 $pkgdir/srv/http/$pkgbase/$i
-  done
+#  for i in events images temp; do
+#    mv    $pkgdir/srv/http/$pkgbase/$i $pkgdir/var/cache/$pkgbase/$i
+#    ln -s /var/cache/$pkgbase/$i       $pkgdir/srv/http/$pkgbase/$i
+#    chown -h http.http                 $pkgdir/srv/http/$pkgbase/$i
+#  done
 
-  ln -s /srv/http/cgi-bin                  $pkgdir/srv/http/$pkgbase
-  chown -h http.http                       $pkgdir/srv/http/{cgi-bin,$pkgbase,$pkgbase/cgi-bin}
+#  ln -s /srv/http/cgi-bin                  $pkgdir/srv/http/$pkgbase
+#  chown -h http.http                       $pkgdir/srv/http/{cgi-bin,$pkgbase,$pkgbase/cgi-bin}
 
-  ln -s /usr/share/cambozola/cambozola.jar $pkgdir/srv/http/$pkgbase
+#  ln -s /usr/share/cambozola/cambozola.jar $pkgdir/srv/http/$pkgbase
 
   install -D -m 644 $srcdir/httpd-$pkgbase.conf $pkgdir/etc/httpd/conf/extra
 #  install -D -m 644 $srcdir/$pkgbase            $pkgdir/etc/rc.d
   install -D -m 644 $srcdir/$pkgbase.service    $pkgdir/usr/lib/systemd/system
   install -D -m 644 COPYING                     $pkgdir/usr/share/license/$pkgbase
-  install -D -m 644 db/zm*.sql                  $pkgdir/usr/share/$pkgbase/db
+#  install -D -m 644 db/zm*.sql                  $pkgdir/usr/share/$pkgbase/db
 }
