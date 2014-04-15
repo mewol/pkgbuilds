@@ -82,7 +82,7 @@ build() {
 package() {
   cd $srcdir/ZoneMinder-$pkgver
 
-  make DESTDIR=$pkgdir install
+  make DESTDIR=$pkgdir/ install
 
 #  mkdir -p $pkgdir/{etc/{httpd/conf/extra,rc.d},srv/http/{cgi-bin,$pkgbase},usr/{lib/systemd/system,share/{license/$pkgbase,$pkgbase/db}},var/{cache/$pkgbase,log/$pkgbase}}
 #  mkdir -p $pkgdir/srv/zoneminder/socks
