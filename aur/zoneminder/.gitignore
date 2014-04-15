@@ -1,6 +1,0 @@
-.gitignore
-/src/
-zoneminder*
-/pkg/
-*.xz
-*.gz
