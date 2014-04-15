@@ -1,0 +1,122 @@
+# Maintainer:  Jacek Burghardt           <jacek@hebe.us>
+# Maintainer:  Vojtech Aschenbrenner     <v@asch.cz>
+# Contributor: Jason Gardner             <buhrietoe@gmail.com>
+# Contributor: Ross melin                <rdmelin@gmail.com>
+# Maintainer (Parabola): Márcio Silva    <coadde@lavabit.com>
+# Contributor (Parabola): André Silva    <emulatorman@lavabit.com>
+# Contributor mewol                      
+
+
+# based of debian squeeze package
+
+pkgbase=zoneminder
+pkgname=zoneminder
+pkgver=1.27.0
+pkgrel=0
+pkgdesc='Capture, analyse, record and monitor video security cameras'
+arch=(
+  i686
+  x86_64
+#  mips64el
+#  arm
+)
+backup=(
+  etc/zm.conf
+)
+url="https://github.com/ZoneMinder/ZoneMinder"
+license=(
+  GPL
+)
+depends=(
+  apache
+  cambozola
+  gnutls
+  mariadb
+  perl-archive-zip
+  perl-date-manip
+  perl-dbd-mysql
+  perl-dbi
+  perl-expect
+  perl-libwww
+  perl-mime-lite
+  perl-mime-tools
+  perl-php-serialization
+  perl-net-sftp-foreign
+  perl-sys-mmap
+  perl-time-modules
+  perl-x10
+  php
+  php-apache
+  php-gd
+  php-mcrypt
+)
+makedepends=(
+  netpbm
+)
+optdepends=(
+  netpbm
+)
+install=$pkgbase.install
+source=(
+  https://github.com/ZoneMinder/ZoneMinder/archive/v$pkgver.tar.gz
+#  httpd-$pkgbase.conf
+  $pkgbase
+  $pkgbase.service
+)
+sha512sums=('8a349558399381a9062365ddc8bd8f815e3800929914096b2e4ea63e4d6dd12054f7b849fab5bea4bcfc87ea60739479a55734c7075a74aab0622d35f1d2bb14'
+#            '4ce0d8eba9d006d258f5b8a83920fc17f1f602b96518d37b7a47cd9b6eb84ef2587641a6ba839a469c3f0e33b46475866187279ae3f8be0d4054b074ee5d6b08'
+            'ab4e1d5ddaf4d9cd53d6ca59d7965902afd6a2dc830fbbafa270736c52c2b3563075fee860bb0276466f96e9dbfb71b259ac45a4ae2e4ead8eaec154a0159eb0'
+            'a49d1398065f72b5ed1b415abd4c438f34baba5e3efbe1c55c7312067d8ca90f542b8df1dcf57d0e73e1eea1fd884d7aad0888039e7537b69048aa7cc229359b')
+
+build() {
+  cd $srcdir/ZoneMinder-$pkgver
+  ./bootstrap.sh
+ 
+
+export CXXFLAGS=-D__STDC_CONSTANT_MACROS
+./configure --prefix=/usr\
+    --enable-crashtrace=no\
+    --enable-debug=no\
+    --enable-mmap=yes\
+    --sysconfdir=/etc\
+    --with-cgidir=/srv/http/cgi-bin\
+    --with-extralibs='-L/usr/lib -L/usr/lib/mysql'\
+    --with-libarch=lib\
+    --with-ffmpeg=/usr \
+    --with-mysql=/usr\
+    --with-webdir=/srv/http/$pkgbase\
+    --with-webgroup=http\
+    --with-webhost=localhost\
+    --with-webuser=http\
+
+  make V=0
+}
+
+package() {
+  cd $srcdir/ZoneMinder-$pkgver
+
+  make DESTDIR=$pkgdir install
+
+  mkdir -p $pkgdir/{etc/{httpd/conf/extra,rc.d},srv/http/{cgi-bin,$pkgbase},usr/{lib/systemd/system,share/{license/$pkgbase,$pkgbase/db}},var/{cache/$pkgbase,log/$pkgbase}}
+  mkdir -p $pkgdir/srv/zoneminder/socks
+  chown -R http.http $pkgdir/{etc/zm.conf,var/{cache/$pkgbase,log/$pkgbase}}
+  chown -R http.http $pkgdir/srv/zoneminder/socks
+  chmod 0700 $pkgdir/etc/zm.conf
+
+  for i in events images temp; do
+    mv    $pkgdir/srv/http/$pkgbase/$i $pkgdir/var/cache/$pkgbase/$i
+    ln -s /var/cache/$pkgbase/$i       $pkgdir/srv/http/$pkgbase/$i
+    chown -h http.http                 $pkgdir/srv/http/$pkgbase/$i
+  done
+
+  ln -s /srv/http/cgi-bin                  $pkgdir/srv/http/$pkgbase
+  chown -h http.http                       $pkgdir/srv/http/{cgi-bin,$pkgbase,$pkgbase/cgi-bin}
+
+  ln -s /usr/share/cambozola/cambozola.jar $pkgdir/srv/http/$pkgbase
+
+  install -D -m 644 $srcdir/httpd-$pkgbase.conf $pkgdir/etc/httpd/conf/extra
+#  install -D -m 644 $srcdir/$pkgbase            $pkgdir/etc/rc.d
+  install -D -m 644 $srcdir/$pkgbase.service    $pkgdir/usr/lib/systemd/system
+  install -D -m 644 COPYING                     $pkgdir/usr/share/license/$pkgbase
+  install -D -m 644 db/zm*.sql                  $pkgdir/usr/share/$pkgbase/db
+}
