@@ -6,6 +6,11 @@
 # Contributor (Parabola): André Silva    <emulatorman@lavabit.com>
 # Contributor mewol                      
 
+###### 
+##  NOTE: This pkgbuild is not currently functional and will probably screw up your system without careful application. It works reasonably well for upgrading, but requires additional configuration, and hasn't been tested at all for a new install. Use at your own risk.
+######
+
+
 
 # based of debian squeeze package
 
@@ -90,11 +95,11 @@ package() {
   chown -R http.http $pkgdir/srv/zoneminder/socks
   chmod 0700 $pkgdir/etc/zm.conf
 
-#  for i in events images temp; do
-#    mv    $pkgdir/srv/http/$pkgbase/$i $pkgdir/var/cache/$pkgbase/$i
-#    ln -s /var/cache/$pkgbase/$i       $pkgdir/srv/http/$pkgbase/$i
-#    chown -h http.http                 $pkgdir/srv/http/$pkgbase/$i
-#  done
+  for i in events images temp; do
+    mv    $pkgdir/srv/http/$pkgbase/$i $pkgdir/var/cache/$pkgbase/$i
+    ln -s /var/cache/$pkgbase/$i       $pkgdir/srv/http/$pkgbase/$i
+    chown -h http.http                 $pkgdir/srv/http/$pkgbase/$i
+  done
 
   ln -s /srv/http/cgi-bin                  $pkgdir/srv/http/$pkgbase
   chown -h http.http                       $pkgdir/srv/http/{cgi-bin,$pkgbase,$pkgbase/cgi-bin}
@@ -106,5 +111,4 @@ package() {
   install -D -m 644 $srcdir/$pkgbase.service    $pkgdir/usr/lib/systemd/system/
   install -D -m 644 COPYING                     $pkgdir/usr/share/license/$pkgbase
   install -D -m 644 db/zm*.sql                  $pkgdir/usr/share/$pkgbase/db
-  rm -rf $pkgdir/home
 }

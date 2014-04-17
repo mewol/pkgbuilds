@@ -22,3 +22,7 @@ simulationcraft-svn: now in the current style! (Which I still need to do with th
 simulationcraft-qt5-svn: GUI version of same. Doesn't even conflict with the console version thanks to a different binary. Woo. 
 
 ampache-doped: Ampache is great. Ampache is poorly-maintained. Ampache-doped is active and maintained. Use it. 
+
+zoneminder: DANGER! This is for the 1.27.0 version of zoneminder, but it's far from finished. Significant user configuration is required, and attempting to use it without knowing what you're doing and editing it appropriately may very well break any installed version of zoneminder you may be using. DON'T USE IT LIKE THIS!
+That said, it does function to build the basic package and worked for me in an upgrade capacity, but requires additional steps (updating the database, making symlinks, etc). It hasn't even been tested on a fresh install, and is not recommended.
+
