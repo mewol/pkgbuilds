@@ -2,7 +2,7 @@
 
 pkgname=ampache-doped
 _gitname=ampache
-pkgver=3.6.alpha6.466.gbc0b8ab
+pkgver=3.6.alpha6.566.g1809b1c
 pkgrel=1
 pkgdesc="A PHP-based tool for managing and playing your audio/video files via a web interface"
 arch=('i686' 'x86_64')
@@ -16,9 +16,9 @@ optdepends=('lame: all transcoding/downsampling'
                 'faad2: m4a transcoding/downsampling'
                 'mp3splt: mp3 and ogg transcoding/downsampling')
 conflicts=('ampache' 'ampache-development')
-backup=(srv/http/ampache-doped/config/ampache.cfg.php)
+backup=(srv/http/ampache/config/ampache.cfg.php)
 install=ampache.install
-source=(git://github.com/ampache-doped/ampache.git)
+source=(git://github.com/ampache/ampache.git)
 md5sums=('SKIP')
 
 pkgver() {
