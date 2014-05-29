@@ -2,11 +2,11 @@
 
 pkgname=ampache-doped
 _gitname=ampache
-pkgver=3.6.alpha6.566.g1809b1c
+pkgver=3.6.alpha6.576.g5489e6d
 pkgrel=1
 pkgdesc="A PHP-based tool for managing and playing your audio/video files via a web interface"
 arch=('i686' 'x86_64')
-url="http://ampache-doped.github.io/"
+url="http://ampache.github.io/"
 license=('GPL')
 depends=('mariadb>=5.0' 'php>=5.3')
 makedepends=('git')
