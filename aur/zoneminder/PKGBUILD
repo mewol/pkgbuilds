@@ -64,12 +64,12 @@ optdepends=(
 source=(
   https://github.com/ZoneMinder/ZoneMinder/archive/v$pkgver.tar.gz
   $pkgbase.service
-  httpd-$pkgbase.conf
+  httpd-zoneminder.conf
 #  $pkgbase.install
 )
 sha512sums=('8a349558399381a9062365ddc8bd8f815e3800929914096b2e4ea63e4d6dd12054f7b849fab5bea4bcfc87ea60739479a55734c7075a74aab0622d35f1d2bb14'
             '8bbfc47ef9d0ec6965b42b4a3e8dfc4b97e050990ef6ef599595659e86f0963b92b4e1af5cce8bf8042a474e9d5e86c6d9304f82cfa22f37c1053eab36276fe4'
-                        '40939f135eaa8ab1c33bed1602af49c2f95031e38c54a196db8c7a1939e0a96041e419cff3b527a1c0ee23f5c369c40387b695ff8d539ddcfd509f8e976bcd5a')
+            '40939f135eaa8ab1c33bed1602af49c2f95031e38c54a196db8c7a1939e0a96041e419cff3b527a1c0ee23f5c369c40387b695ff8d539ddcfd509f8e976bcd5a')
 
 build() {
   cd $srcdir/ZoneMinder-$pkgver
@@ -95,11 +95,11 @@ package() {
   chown -R http.http $pkgdir/srv/zoneminder/socks
   chmod 0700 $pkgdir/etc/zm.conf
 
-  for i in events images temp; do
-    mv    $pkgdir/srv/http/$pkgbase/$i $pkgdir/var/cache/$pkgbase/$i
-    ln -s /var/cache/$pkgbase/$i       $pkgdir/srv/http/$pkgbase/$i
-    chown -h http.http                 $pkgdir/srv/http/$pkgbase/$i
-  done
+#  for i in events images temp; do
+#    mv    $pkgdir/srv/http/$pkgbase/$i $pkgdir/var/cache/$pkgbase/$i
+#    ln -s /var/cache/$pkgbase/$i       $pkgdir/srv/http/$pkgbase/$i
+#    chown -h http.http                 $pkgdir/srv/http/$pkgbase/$i
+#  done
 
   ln -s /srv/http/cgi-bin                  $pkgdir/srv/http/$pkgbase
   chown -h http.http                       $pkgdir/srv/http/{cgi-bin,$pkgbase,$pkgbase/cgi-bin}
