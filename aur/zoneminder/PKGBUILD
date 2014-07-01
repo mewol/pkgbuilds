@@ -8,8 +8,10 @@
 
 ###### 
 ##  NOTE: This pkgbuild is not currently functional and will probably screw up your system without careful application. It works reasonably well for upgrading, but requires additional configuration, and hasn't been tested at all for a new install. Use at your own risk.
-######
 
+# also, nifty skin available at 
+######
+# http://www.cassandra.org/software/zm-skin/arc-console.html
 
 
 # based of debian squeeze package
