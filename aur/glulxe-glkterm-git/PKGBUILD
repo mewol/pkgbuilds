@@ -8,7 +8,7 @@
 
 # Maintainer: matt wolejko <mewolejko@gmail.com>
 pkgname=glulxe-glkterm-git
-pkgver=20130513
+pkgver=glulxe.0.5.2.r4.g16c764b
 pkgrel=1
 pkgdesc="ncurses-based interactive fiction interpreter for Glulx (Inform) games."
 arch=('i686' 'x86_64' 'armv6h')
