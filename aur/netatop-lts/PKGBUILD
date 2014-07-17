@@ -2,6 +2,7 @@
 # Contributor: Spider.007 <archPackage@spider007.net>
 # contributor: mewol
 pkgname=netatop-lts
+_pkgname2=netatop
 pkgver=0.3
 pkgrel=0
 pkgdesc="Atop network kernel module, enables network statistics in atop"
@@ -17,13 +18,13 @@ md5sums=('b8c3785571c1b35ff3c21d49d51283d4')
 arch=('x86_64' 'i386')
 
 build() {
-	cd $srcdir/$pkgname-$pkgver
+	cd $srcdir/$_pkgname2-$pkgver
 
 	make all
 }
 
 package() {
-	cd $srcdir/$pkgname-$pkgver
+    cd $srcdir/$_pkgname2-$pkgver
 	v=`uname -r`
 	install -Dm 0744 module/netatop.ko $pkgdir/lib/modules/extramodules-${v%.*}-lts/netatop.ko
 
