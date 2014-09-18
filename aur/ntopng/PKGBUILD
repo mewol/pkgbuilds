@@ -13,9 +13,13 @@ options=('!makeflags')
 depends=('redis' 'libxml2' 'geoip' 'libpcap' 'libnet' 'lua' 'zeromq' 'gd'
          'gdbm' 'pcre' 'rrdtool' 'psutils')
 source=("http://downloads.sourceforge.net/project/ntop/ntopng/ntopng-$pkgver.tgz"
-        ntopng.service)
+        ntopng.service
+        ntopng@.service)
+
 md5sums=('4fe64c701e6dbfa42e9ced518d9c7836'
-         'dac6ab08119558c2b3fc23960e6691b1')
+         '132ae9af9f2fe91dc6e2fe6948d45247'
+         '5d3dd12fd77756138f45769e31b67505')
+
 
 build() {
   cd "$srcdir/ntopng-$pkgver"
