@@ -49,6 +49,8 @@ package() {
 
   # Systemd service.
   install -m644 "$srcdir/ntopng.service" "$pkgdir/usr/lib/systemd/system"
+  install -m644 "$srcdir/ntopng@.service" "$pkgdir/usr/lib/systemd/system"
+
 
   cat > "$pkgdir/usr/bin/ntopng" <<EOF
 #!/bin/sh
