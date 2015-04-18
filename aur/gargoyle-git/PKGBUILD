@@ -1,0 +1,59 @@
+# Maintainer: mewol
+# Contributor: Eric Forgeot < http://ifiction.free.fr >
+
+pkgname=gargoyle-git
+pkgver=611
+pkgrel=1
+pkgdesc="Interactive Fiction multi-interpreter that supports all major IF formats, svn version."
+arch=(i686 x86_64)
+url="https://github.com/garglk/garglk"
+license=('GPL')
+depends=('gtk2' 'sdl_mixer' 'sdl_sound' 'libvorbis' 'freetype2')
+#sdl_image ?
+makedepends=('ftjam' 'pkgconfig' 'subversion')
+provides=('gargoyle')
+conflicts=('gargoyle' 'gargoyle-mod' 'gargoyle-svn')
+replaces=('gargoyle' 'gargoyle-mod' 'gargoyle-svn')
+backup=()
+options=()
+install=
+source=("$pkgname"::'git+https://github.com/garglk/garglk')
+noextract=()
+groups=()
+md5sums=('SKIP')
+
+build() {
+	sed -i "s|OPTIM = -O2 ;|OPTIM = ${CFLAGS} ;|" $pkgname/Jamrules
+    
+	cd "$pkgname"
+	jam ||return 1
+	jam install || return 1
+}
+
+pkgver() {
+    cd "$pkgname"
+    git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+
+package() {
+	mkdir -p $pkgdir/usr/share/gargoyle/
+	mkdir -p $pkgdir/usr/bin
+	mkdir -p $pkgdir/usr/lib
+	install $pkgname/build/dist/* $pkgdir/usr/share/gargoyle/
+	ln -s /usr/share/gargoyle/gargoyle $pkgdir/usr/bin/gargoyle
+	install $pkgname/build/dist/libgarglk.so	$pkgdir/usr/lib/
+	
+	mkdir -p $pkgdir/etc
+	install $pkgname/garglk/garglk.ini $pkgdir/etc/garglk.ini
+	
+#   I couldn't care less about desktop icons for a program I always start via
+#   command line, but I figure this would be the way to make them. Not tested, 
+#   simply adapted from the gargoyle PKGBUILD on the AUR.
+
+#	mkdir -p $pkgdir/usr/share/pixmaps
+#	mkdir -p $pkgdir/usr/share/applications
+#	cp $pkgname/garglk/gargoyle-house.png $pkgdir/usr/share/pixmaps/$pkgname.png
+#	install -D -m644 $pkgname/garglk/gargoyle.desktop $pkgdir/usr/share/applications/$pkgname.desktop
+}
+
